@@ -10,15 +10,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProduct, ProductService>();
+
 builder.Services
     .AddHealthChecks()
-    .AddCheck<APIHealthCheck>(nameof(APIHealthCheck));
+    .AddCheck<APIHealthCheck>(nameof(APIHealthCheck))
+    .AddCheck<DatabaseHealth>(nameof(DatabaseHealth));
+
+builder.Services
+    .AddHealthChecksUI(options =>
+    {
+        options.AddHealthCheckEndpoint("Healthcheck API", "/health");
+    })
+    .AddInMemoryStorage();
 
 var app = builder.Build();
-app.MapHealthChecks("/health", new()
-{
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -33,5 +39,12 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health", new()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options => options.UIPath = "/dashboard");
 
 app.Run();
