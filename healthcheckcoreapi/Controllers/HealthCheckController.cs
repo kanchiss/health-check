@@ -5,7 +5,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace healthcheckcoreapi.Controllers
 {
-    public class HealthCheckController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class HealthCheckController : ControllerBase
     {
         private readonly ILogger<HealthCheckController> _logger;
         private readonly HealthCheckService _service;
@@ -16,7 +18,7 @@ namespace healthcheckcoreapi.Controllers
             _service = service;
         }
 
-        [HttpGet]
+        [HttpGet("getservicehealth")]
         public async Task<IActionResult> Get()
         {
             var report = await _service.CheckHealthAsync();

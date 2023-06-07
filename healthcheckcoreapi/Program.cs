@@ -1,3 +1,4 @@
+using healthcheckcoreapi.HealthChecks;
 using healthcheckcoreapi.Repository;
 using HealthChecks.UI.Client;
 
@@ -5,16 +6,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<IProduct, ProductService>();
 
 builder.Services
     .AddHealthChecks()
     .AddCheck<APIHealthCheck>(nameof(APIHealthCheck))
-    .AddCheck<DatabaseHealth>(nameof(DatabaseHealth));
+    .AddCheck<DatabaseHealth>(nameof(DatabaseHealth))
+    .AddCheck<FetchProdcutHealth>(nameof(FetchProdcutHealth));
 
 builder.Services
     .AddHealthChecksUI(options =>
@@ -33,8 +40,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 
 app.UseAuthorization();
 

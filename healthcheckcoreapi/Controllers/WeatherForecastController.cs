@@ -35,7 +35,7 @@ namespace healthcheckcoreapi.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("getproduct")]
         public List<Product> GetProduct()
         {
             return _productRepository.GetProducts();

@@ -11,33 +11,32 @@ namespace healthcheckcoreapi.Repository
             try
             {
                 List<Product> products = new List<Product>();
-                using (MySqlConnection pgSqlConnection =
-                 new MySqlConnection("User Id = postgres; Password = sa123#;" +
-                 "host=localhost;database=Demo;"))
+                using (MySqlConnection mySqlConnection =
+                 new MySqlConnection("host=localhost;port=3306;uid=root;password=root;database=product;"))
                 {
-                    using (MySqlCommand pgSqlCommand = new MySqlCommand())
+                    using (MySqlCommand mySqlCommand = new MySqlCommand())
                     {
-                        pgSqlCommand.CommandText =
+                        mySqlCommand.CommandText =
                         "Select * From product";
-                        pgSqlCommand.Connection = pgSqlConnection;
-                        if (pgSqlConnection.State !=
+                        mySqlCommand.Connection = mySqlConnection;
+                        if (mySqlConnection.State !=
                         System.Data.ConnectionState.Open)
-                            pgSqlConnection.Open();
-                        using (var pgSqlReader =
-                         pgSqlCommand.ExecuteReader())
+                            mySqlConnection.Open();
+                        using (var mySqlReader =
+                         mySqlCommand.ExecuteReader())
                         {
-                            while (pgSqlReader.Read())
+                            while (mySqlReader.Read())
                             {
                                Product product = new Product();
                                product.Id =
-                               int.Parse(pgSqlReader.GetValue(0).ToString());
+                               int.Parse(mySqlReader.GetValue(0).ToString());
                                product.ProductName =
-                               pgSqlReader.GetValue(1).ToString();
+                               mySqlReader.GetValue(1).ToString();
                                product.Price = 
-                               decimal.Parse(pgSqlReader.GetValue(2).ToString());
+                               decimal.Parse(mySqlReader.GetValue(2).ToString());
                                product.Description =
 
-                               pgSqlReader.GetValue(3).ToString();
+                               mySqlReader.GetValue(3).ToString();
                                products.Add(product);
                             }
                         }

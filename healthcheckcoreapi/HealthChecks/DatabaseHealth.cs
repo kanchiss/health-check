@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MySql.Data.MySqlClient;
 
-namespace healthcheckcoreapi.Repository
+namespace healthcheckcoreapi.HealthChecks
 {
     public class DatabaseHealth : IHealthCheck
     {
@@ -9,9 +9,7 @@ namespace healthcheckcoreapi.Repository
         {
             try
             {
-                using (MySqlConnection mySqlConnection =
-                     new MySqlConnection("User Id = postgres; Password = sa123#;" +
-                     "host=localhost;database=Demo;"))
+                using (MySqlConnection mySqlConnection = new MySqlConnection("host=localhost;port=3306;uid=root;password=root;database=product;"))
                 {
                     if (mySqlConnection.State == System.Data.ConnectionState.Open)
                     {
